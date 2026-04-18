@@ -11,22 +11,26 @@ class Livraria{
         int quantidade;
         string nome, autor;
         double preco;
-        char escolha;
-        string cupom = "Sem cupom";
-        char escolhaCupom;
+        int id;
+        char escolha = 'y';
+        string tipoLivro = string.Empty;
+        string tipoCapa = string.Empty;
+        string formato = string.Empty;
 
-        GestorLivraria gestorLivraria = new GestorLivraria();
-        do{
+            GestorLivraria gestorLivraria = new GestorLivraria();
+            do
+            {
             int opcao = 0;
 
             try{
-                Console.WriteLine();
-                Console.WriteLine("BEM VINDO AO CARRINHO, SELECIONE UMA DAS OPÇÕES!!");
-                Console.WriteLine("[1] - ADICIONAR LIVROS");
-                Console.WriteLine("[2] - REMOVER LIVROS");
-                Console.WriteLine("[3] - MOSTRAR LISTA DE LIVROS");
-                Console.WriteLine();
-                opcao = ConsoleUtils.LetInteiro("ESCOLHA UMA OPÇÃO: ");
+
+                    Console.WriteLine();
+                    Console.WriteLine("BEM VINDO AO CARRINHO, SELECIONE UMA DAS OPÇÕES!!");
+                    Console.WriteLine("[1] - ADICIONAR LIVROS");
+                    Console.WriteLine("[2] - REMOVER LIVROS");
+                    Console.WriteLine("[3] - MOSTRAR LISTA DE LIVROS");
+                    Console.WriteLine();
+                    opcao = ConsoleUtils.LerInteiro("ESCOLHA UMA OPÇÃO: ");
             }
             catch (Exception e){
                 Console.WriteLine(e.Message);
@@ -35,15 +39,34 @@ class Livraria{
             switch (opcao){
                 case 1:
                     try{
-                     quantidade = ConsoleUtils.LetInteiro("Quantos livros serão adicionados?: ");
+                     quantidade = ConsoleUtils.LerInteiro("Quantos livros serão adicionados?: ");
                         for(int i = 0; i < quantidade; i++){
                             Console.WriteLine();
+                            Console.WriteLine($"LIVRO {i + 1}:");
+                            id = ConsoleUtils.LerInteiro("Digite o ID do livro: ");
                             nome = ConsoleUtils.LerString("Digite o nome do livro: ");
-                            preco = ConsoleUtils.LetDouble("Digite o preço do livro: ");
+                            preco = ConsoleUtils.LerDouble("Digite o preço do livro: ");
                             autor = ConsoleUtils.LerString("Nome do autor: ");
-                        
-                            Livro livro = new Livro(nome, preco, autor);
-                            gestorLivraria.AdicionarLivros(livro);
+
+                            Console.WriteLine();
+                            
+                            tipoLivro = ConsoleUtils.LerString("Digite o tipo do livro (FISICO ou DIGITAL): ");
+
+
+                                if (tipoLivro.ToUpper() == "FISICO"){
+                                    tipoCapa = ConsoleUtils.LerString("Digite o tipo de capa do livro: ");
+                                    LivroFisico livroFisico = new LivroFisico(id, nome, preco, autor, tipoCapa);
+                                    gestorLivraria.AdicionarLivros(livroFisico);
+                                } else if (tipoLivro.ToUpper() == "DIGITAL")
+                                {
+                                   formato = ConsoleUtils.LerString("Digite o formato do livro: ");
+                                   LivroDigital livroDigital = new LivroDigital(id, nome, preco, autor, formato);
+                                    gestorLivraria.AdicionarLivros(livroDigital);
+                                }
+                                else{
+                                    Console.WriteLine("Tipo de livro inválido. POR FAVOR, digite o tipo correto (FISICO ou DIGITAL).");
+                                    continue;
+                                }
                         }
 
                     }catch (Exception e){
@@ -56,11 +79,11 @@ class Livraria{
                 case 2 :
                     try{
                         
-                            quantidade = ConsoleUtils.LetInteiro("Quantos livros serão removidos?: ");
+                            quantidade = ConsoleUtils.LerInteiro("Quantos livros serão removidos?: ");
 
                             for(int i = 0; i < quantidade; i++){
-                                nome = ConsoleUtils.LerString("Digite exatamente o nome do livro que será removido: ");
-                                gestorLivraria.RemoverLivros(nome);
+                                id = ConsoleUtils.LerInteiro("Digite exatamente o ID do livro que será removido: ");
+                                gestorLivraria.RemoverLivros(id);
                             }
                         
                 
@@ -72,7 +95,10 @@ class Livraria{
 
                 case 3:
 
+                    
                     gestorLivraria.MostrarLista();
+                    Console.WriteLine();
+                    gestorLivraria.FiltrarLivros();
 
                 break;
 
@@ -84,29 +110,34 @@ class Livraria{
         
         }
 
-            Console.WriteLine();
-            escolha = ConsoleUtils.LetCaractere("Deseja adicionar/consultar ou remover livros?: ");
+            try{
+                Console.WriteLine();
+                escolha = ConsoleUtils.LerCaractere("Deseja adicionar/consultar ou remover livros? [y/n]: ");
+            }catch (Exception e){
+                Console.WriteLine(e.Message);
+            }
         
         
         }while(escolha == 'y' || escolha == 'Y');
 
         Console.WriteLine();
-        Console.WriteLine("CALCULANDO CARRINHO...");
+        Console.WriteLine("PROCESSANDO ITENS, AGUARDE...");
+        Console.WriteLine("...");
+        Console.WriteLine($"STATUS CARRINHO: {Status.PENDENTE}");
+        Console.WriteLine();
+
         
-    
-        escolhaCupom = ConsoleUtils.LetCaractere("Deseja inserir um cupom? [y/n]: ");
+        
+        Console.WriteLine("LIVROS COMPRADOS:");
+        Console.WriteLine($"TOTAL A PAGAR: R${gestorLivraria.CalcularTotal().ToString("N2")}");
 
-         if (escolhaCupom == 'y' || escolhaCupom == 'Y'){
-                cupom = ConsoleUtils.LerString("Digite o cupom: ");
-                double total = gestorLivraria.CalcularTotal(cupom);
-                Console.WriteLine("Total a pagar: R${0}", total.ToString("N2"));
-         }else{
-                double total = gestorLivraria.CalcularTotal(cupom);
-                Console.WriteLine("Total a pagar: R${0}", total.ToString("N2"));
-          }
+        Console.WriteLine();
+        Console.WriteLine($"STATUS CARRINHO: {Status.FINALIZADO}");
+        Console.WriteLine("Obrigado por comprar conosco, volte sempre!!");
 
 
-          
+
+            Console.ReadKey();
         
             
 

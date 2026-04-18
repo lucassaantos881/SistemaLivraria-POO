@@ -3,7 +3,7 @@ namespace SistemaLivraria{
 
 public static class ConsoleUtils{
     
-    public static int LetInteiro(string mensagem){
+    public static int LerInteiro(string mensagem){
         int tentativas = 0;
         int inteiroValido;
 
@@ -17,14 +17,14 @@ public static class ConsoleUtils{
             }
 
             tentativas++;
-            Console.WriteLine("Valor incorreto, tente novamente ({0} restantes)", 3 - tentativas);
+            Console.WriteLine($"Valor incorreto, tente novamente ({3 - tentativas} restantes)");
         }
         
         throw new ArgumentException("ERRO: Entrada digitadas incorretamente repetidas vezes, tente novamente mais tarde!!");
         
     }
 
-     public static double LetDouble(string mensagem){
+     public static double LerDouble(string mensagem){
         int tentativas = 0;
         double decimalValido;
 
@@ -37,7 +37,7 @@ public static class ConsoleUtils{
             }
 
             tentativas++;
-            Console.WriteLine("Valor incorreto, tente novamente ({0} restantes)", 3 - tentativas);
+            Console.WriteLine($"Valor incorreto, tente novamente ({3 - tentativas} restantes)");
         }
         
         throw new ArgumentException("ERRO: Entrada digitadas incorretamente repetidas vezes, tente novamente mais tarde!!");
@@ -58,7 +58,7 @@ public static class ConsoleUtils{
             }
 
             tentativas++;
-            Console.WriteLine("Valor incorreto, tente novamente ({0} restantes)", 3 - tentativas);
+            Console.WriteLine($"Valor incorreto, tente novamente ({3 - tentativas} restantes)");
 
         }     
 
@@ -66,7 +66,7 @@ public static class ConsoleUtils{
 
     }
 
-    public static char LetCaractere(string mensagem){
+    public static char LerCaractere(string mensagem){
         int tentativas = 0;
         char caractereValido;
 
@@ -80,7 +80,7 @@ public static class ConsoleUtils{
             }
 
             tentativas++;
-            Console.WriteLine("Valor incorreto, tente novamente ({0} restantes)", 3 - tentativas);
+            Console.WriteLine($"Valor incorreto, tente novamente ({3 - tentativas} restantes)");
 
         }     
 
