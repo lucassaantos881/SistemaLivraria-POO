@@ -1,23 +1,33 @@
-# 📚 Sistema de Gestão de Livraria
+# 📚 Sistema de Gestão de Livraria (C# / POO)
 
-Este é um projeto de console desenvolvido em **C#** que simula o fluxo de um carrinho de compras de uma livraria, aplicando conceitos fundamentais de Programação Orientada a Objetos.
+Este projeto é um sistema de console robusto desenvolvido em **C#** que simula o fluxo de um carrinho de compras de uma livraria. O objetivo principal foi aplicar os pilares da **Programação Orientada a Objetos (POO)** em um cenário real.
 
-## 🛠️ Tecnologias e Conceitos Aplicados
-- **C# / .NET 8**
-- **Herança e Abstração:** Classe base `Produto` e classe derivada `Livro`.
-- **Encapsulamento:** Uso de propriedades com validação (`get`/`set`) para evitar preços negativos.
-- **Coleções Genéricas:** Gerenciamento de dados com `List<T>`.
-- **Tratamento de Exceções:** Uso de `try-catch` para garantir que o programa não feche em caso de erros de entrada.
+## 🚀 Evolução Técnica e Refatoração
 
-## 🚀 Destaque Técnico: Remoção Segura de Itens
-Um dos desafios deste projeto foi a remoção de itens de uma lista durante a iteração. Implementei uma lógica de **percorrer a lista em ordem reversa** (do último índice para o primeiro). 
+Recentemente, o projeto passou por uma grande refatoração. Saímos de uma lógica linear para uma arquitetura baseada em classes, permitindo que o sistema seja facilmente escalável.
 
-Isso garante que, ao remover um item, o deslocamento dos índices dos elementos restantes não afete a integridade do loop, evitando erros de "Index Out of Range".
+### 🧠 Conceitos de POO Aplicados:
+* **Abstração e Herança:** Criação de uma classe base `Produto` e classes derivadas especializadas como `LivroFisico` e `LivroDigital`.
+* **Polimorfismo:** Implementação de métodos sobrescritos (`override`) para calcular o total da compra. O sistema decide automaticamente se aplica **taxa de frete** (Físico) ou **desconto promocional** (Digital).
+* **Encapsulamento:** Uso de propriedades com validações para garantir a integridade dos dados (como preços e quantidades).
+* **Coleções Genéricas:** Uso de `List<T>` e LINQ (`OfType`) para filtragem e manipulação eficiente dos itens.
+
+## 🛠️ Funcionalidades
+
+- [x] **Adição Dinâmica:** Cadastro de livros físicos e digitais com atributos específicos.
+- [x] **Remoção Segura:** Exclusão de itens da lista via **ID único**, utilizando iteração reversa para manter a integridade dos índices.
+- [x] **Processamento de Checkout:** Simulação de status do pedido (Pendente -> Finalizado) com cálculo automático de impostos e descontos.
+- [x] **Listagem de Itens:** Exibição detalhada dos livros no carrinho, incluindo informações específicas de cada tipo.
+- [ ] **Futuro:** Implementação de persistência de dados (banco de dados ou arquivos) para manter o histórico de compras.
+
+## 💻 Exemplo de Código (Destaque)
+
+Para evitar o erro de `Index Out of Range` ao remover itens, utilizei a lógica de percorrer a lista de trás para frente:
 
 ```csharp
-// Exemplo da lógica utilizada:
-for(int i = livros.Count - 1; i >= 0; i--) {
-    if (entrada == livros[i].Nome) {
+// Remoção segura por ID
+for (int i = livros.Count - 1; i >= 0; i--) {
+    if (entradaId == livros[i].Id) {
         livros.RemoveAt(i);
     }
 }
