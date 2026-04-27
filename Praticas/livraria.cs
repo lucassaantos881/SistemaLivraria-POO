@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 
 namespace SistemaLivraria{
@@ -29,6 +30,7 @@ class Livraria{
                     Console.WriteLine("[1] - ADICIONAR LIVROS");
                     Console.WriteLine("[2] - REMOVER LIVROS");
                     Console.WriteLine("[3] - MOSTRAR LISTA DE LIVROS");
+                    Console.WriteLine("[4] - CONSULTAR LIVRO POR ID");
                     Console.WriteLine();
                     opcao = ConsoleUtils.LerInteiro("ESCOLHA UMA OPÇÃO: ");
             }
@@ -39,37 +41,44 @@ class Livraria{
             switch (opcao){
                 case 1:
                     try{
-                     quantidade = ConsoleUtils.LerInteiro("Quantos livros serão adicionados?: ");
-                        for(int i = 0; i < quantidade; i++){
-                            Console.WriteLine();
-                            Console.WriteLine($"LIVRO {i + 1}:");
-                            id = ConsoleUtils.LerInteiro("Digite o ID do livro: ");
-                            nome = ConsoleUtils.LerString("Digite o nome do livro: ");
-                            preco = ConsoleUtils.LerDouble("Digite o preço do livro: ");
-                            autor = ConsoleUtils.LerString("Nome do autor: ");
+                            while (escolha == 'y' || escolha == 'Y') {
+                                id = ConsoleUtils.LerInteiro("Digite o ID do livro: ");
+                                Console.WriteLine();
 
-                            Console.WriteLine();
-                            
-                            tipoLivro = ConsoleUtils.LerString("Digite o tipo do livro (FISICO ou DIGITAL): ");
+                                nome = ConsoleUtils.LerString("Digite o nome do livro: ");
+                                preco = ConsoleUtils.LerDouble("Digite o preço do livro: ");
+                                autor = ConsoleUtils.LerString("Nome do autor: ");
+                                quantidade = ConsoleUtils.LerInteiro("Qual a quantidade que será inserida?: ");
+                                tipoLivro = ConsoleUtils.LerString("Digite o tipo do livro (FISICO ou DIGITAL): ");
 
 
-                                if (tipoLivro.ToUpper() == "FISICO"){
-                                    tipoCapa = ConsoleUtils.LerString("Digite o tipo de capa do livro: ");
-                                    LivroFisico livroFisico = new LivroFisico(id, nome, preco, autor, tipoCapa);
-                                    gestorLivraria.AdicionarLivros(livroFisico);
-                                } else if (tipoLivro.ToUpper() == "DIGITAL")
+                                if (tipoLivro.ToUpper() == "FISICO")
                                 {
-                                   formato = ConsoleUtils.LerString("Digite o formato do livro: ");
-                                   LivroDigital livroDigital = new LivroDigital(id, nome, preco, autor, formato);
+                                    Console.WriteLine();
+                                    tipoCapa = ConsoleUtils.LerString("Digite o tipo de capa do livro (DURA/SIMPLES): ");
+                                    LivroFisico livroFisico = new LivroFisico(id, nome, preco, autor, tipoCapa, quantidade);
+                                    gestorLivraria.AdicionarLivros(livroFisico);
+                                }
+                                else if (tipoLivro.ToUpper() == "DIGITAL")
+                                {
+                                    Console.WriteLine();
+                                    formato = ConsoleUtils.LerString("Digite o formato do livro (PDF/EPUB): ");
+                                    LivroDigital livroDigital = new LivroDigital(id, nome, preco, autor, formato, quantidade);
                                     gestorLivraria.AdicionarLivros(livroDigital);
                                 }
-                                else{
+                                else
+                                {
                                     Console.WriteLine("Tipo de livro inválido. POR FAVOR, digite o tipo correto (FISICO ou DIGITAL).");
-                                    continue;
+                                    break;
                                 }
-                        }
 
-                    }catch (Exception e){
+                                Console.WriteLine();
+                                escolha = ConsoleUtils.LerCaractere("Deseja adicionar mais um livro? [y/n]: ");
+                                Console.WriteLine();
+                            }
+
+                        }
+                        catch (Exception e){
                         Console.WriteLine(e.Message);
                     }
 
@@ -78,13 +87,17 @@ class Livraria{
 
                 case 2 :
                     try{
-                        
-                            quantidade = ConsoleUtils.LerInteiro("Quantos livros serão removidos?: ");
 
-                            for(int i = 0; i < quantidade; i++){
+                       while (escolha == 'y' || escolha == 'Y') {
+
                                 id = ConsoleUtils.LerInteiro("Digite exatamente o ID do livro que será removido: ");
                                 gestorLivraria.RemoverLivros(id);
+
+                                Console.WriteLine();
+                                escolha = ConsoleUtils.LerCaractere("Deseja remover mais um livro? [y/n]: ");
+                                Console.WriteLine();
                             }
+                            
                         
                 
                     }catch (Exception e){
@@ -94,18 +107,25 @@ class Livraria{
 
 
                 case 3:
-
-                    
-                    gestorLivraria.MostrarLista();
-                    Console.WriteLine();
                     gestorLivraria.FiltrarLivros();
 
                 break;
 
-              default:
+                 case 4:
+                        id = ConsoleUtils.LerInteiro("Digite exatamente o ID do livro que será consultado: ");
+                        gestorLivraria.ConsultarLivro(id);
 
-                Console.WriteLine("Saindo!!");
-              break;
+                        Console.WriteLine();
+                        escolha = ConsoleUtils.LerCaractere("Deseja consultar mais um livro? [y/n]: ");
+                        Console.WriteLine();
+
+                        break;
+
+                 default:
+
+                   Console.WriteLine("Saindo!!");
+
+                 break;
 
         
         }
@@ -138,14 +158,7 @@ class Livraria{
 
 
             Console.ReadKey();
-        
-            
-
-
-         
-
-        ;
-
+     
     }
 
 }

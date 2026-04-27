@@ -1,33 +1,40 @@
-# 📚 Sistema de Gestão de Livraria (C# / POO)
+# 📚 Sistema de Gestão de Livraria (C# / POO & Performance)
 
-Este projeto é um sistema de console robusto desenvolvido em **C#** que simula o fluxo de um carrinho de compras de uma livraria. O objetivo principal foi aplicar os pilares da **Programação Orientada a Objetos (POO)** em um cenário real.
+Este projeto é um sistema de console robusto desenvolvido em **C#** que simula o fluxo de um carrinho de compras de uma livraria. O foco principal é a aplicação prática de **Programação Orientada a Objetos (POO)** aliada a **estruturas de dados eficientes**.
 
-## 🚀 Evolução Técnica e Refatoração
+## 🚀 Evolução Técnica e Refatoração (Dictionary & Performance)
 
-Recentemente, o projeto passou por uma grande refatoração. Saímos de uma lógica linear para uma arquitetura baseada em classes, permitindo que o sistema seja facilmente escalável.
+Recentemente, o projeto passou por uma profunda refatoração estrutural. Substituímos o uso de listas lineares por um **Dicionário (`Dictionary<int, T>`)**, transformando a busca e remoção de itens em operações de **complexidade O(1)** (tempo constante).
 
-### 🧠 Conceitos de POO Aplicados:
-* **Abstração e Herança:** Criação de uma classe base `Produto` e classes derivadas especializadas como `LivroFisico` e `LivroDigital`.
-* **Polimorfismo:** Implementação de métodos sobrescritos (`override`) para calcular o total da compra. O sistema decide automaticamente se aplica **taxa de frete** (Físico) ou **desconto promocional** (Digital).
-* **Encapsulamento:** Uso de propriedades com validações para garantir a integridade dos dados (como preços e quantidades).
-* **Coleções Genéricas:** Uso de `List<T>` e LINQ (`OfType`) para filtragem e manipulação eficiente dos itens.
+### 🧠 Conceitos de POO e Estruturas Aplicados:
+* **Abstração e Herança:** Classes base e derivadas para representar diferentes tipos de produtos.
+* **Polimorfismo:** Métodos sobrescritos para cálculos automáticos de frete (Físico) e descontos (Digital).
+* **Encapsulamento Avançado:** Propriedades com lógica de validação (`throw new ArgumentException`) para proteger o estado dos objetos.
+* **Performance com Dictionary:** Uso de chaves únicas (ID) para acesso instantâneo aos dados, eliminando laços de repetição desnecessários em buscas.
+* **Pattern Matching:** Uso de `is` com variáveis temporárias para filtragem de tipos de forma segura e moderna.
 
 ## 🛠️ Funcionalidades
 
-- [x] **Adição Dinâmica:** Cadastro de livros físicos e digitais com atributos específicos.
-- [x] **Remoção Segura:** Exclusão de itens da lista via **ID único**, utilizando iteração reversa para manter a integridade dos índices.
-- [x] **Processamento de Checkout:** Simulação de status do pedido (Pendente -> Finalizado) com cálculo automático de impostos e descontos.
-- [x] **Listagem de Itens:** Exibição detalhada dos livros no carrinho, incluindo informações específicas de cada tipo.
-- [ ] **Futuro:** Implementação de persistência de dados (banco de dados ou arquivos) para manter o histórico de compras.
+- [x] **Adição Inteligente:** Cadastro via Dicionário, garantindo que não existam IDs duplicados no sistema.
+- [x] **Busca Instantânea:** Consulta de livros por ID utilizando `TryGetValue`, garantindo performance máxima.
+- [x] **Remoção de Alta Performance:** Exclusão de itens via chave única, sem necessidade de percorrer toda a coleção ou usar iteração reversa.
+- [x] **Processamento de Checkout:** Cálculo automático do total considerando as regras de negócio de cada tipo de livro.
+- [x] **Listagem Filtrada:** Exibição detalhada separando livros físicos de digitais em tempo de execução.
 
-## 💻 Exemplo de Código (Destaque)
+## 💻 Destaque Técnico: Busca e Remoção O(1)
 
-Para evitar o erro de `Index Out of Range` ao remover itens, utilizei a lógica de percorrer a lista de trás para frente:
+Com a migração para `Dictionary`, o sistema ganhou em escalabilidade. A recuperação de dados agora é direta pela chave:
 
 ```csharp
-// Remoção segura por ID
-for (int i = livros.Count - 1; i >= 0; i--) {
-    if (entradaId == livros[i].Id) {
-        livros.RemoveAt(i);
-    }
+// Exemplo de busca instantânea (O desafio superado)
+if (_livros.TryGetValue(idBuscado, out var livro)) 
+{
+    Console.WriteLine($"Livro encontrado: {livro.Nome}");
 }
+else 
+{
+    Console.WriteLine("ID não localizado.");
+}
+
+// Remoção direta por chave única
+_livros.Remove(idParaRemover);

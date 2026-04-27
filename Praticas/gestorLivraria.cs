@@ -10,80 +10,99 @@ namespace SistemaLivraria
 
         }
 
-        private List<Livro> livros = new List<Livro>();
+        private Dictionary<int, Livro> _livros = new Dictionary<int, Livro>(); 
 
         public void AdicionarLivros(Livro newLivro)
         {
-            livros.Add(newLivro);
+            if (!_livros.ContainsKey(newLivro.Id))
+            {
+                _livros.Add(newLivro.Id, newLivro);
+            }else {
+                throw new ArgumentException("ERRO: ID JÁ EXISTE!!");
+            
+            }
         }
 
         public void FiltrarLivros()
         {
 
-            //Cria duas listas, e utiliza o método OfType para filtrar os livros físicos e digitais, depois exibe cada uma das listas usando o foreach.
-            var listaLivrosFisicos = livros.OfType<LivroFisico>().ToList();
-            var listaLivrosDigitais = livros.OfType<LivroDigital>().ToList();
-            Console.WriteLine("LIVROS FÍSICOS:");
-            foreach (var livroFisico in listaLivrosFisicos)
+    
+            foreach (var item in _livros.Values)
             {
-                Console.WriteLine($"ID:{livroFisico.Id},{livroFisico.Nome.ToUpper()}, R${livroFisico.Preco.ToString("N2")}, {livroFisico.Autor.ToUpper()}, {livroFisico.TipoCapa.ToUpper()}, Valor com Frete: R${livroFisico.CalcularTotal().ToString("N2")}");
+                if (item is LivroFisico fisico)
+                {
+                    Console.WriteLine($"LIVRO FÍSICO ID: {fisico.Id}");
+                    Console.WriteLine($"NOME: {fisico.Nome.ToUpper()} -- PREÇO: R${fisico.Preco.ToString("N2")} -- AUTOR: {fisico.Autor.ToUpper()} -- TIPO CAPA: {fisico.TipoCapa.ToUpper()} -- QUANTIDADE: {fisico.Quantidade}x === PREÇO COM FRETE: {fisico.CalcularTotal().ToString("N2")}");
+                    Console.WriteLine();
+
+                } else if (item is LivroDigital digital) {
+                    Console.WriteLine($"LIVRO DIGITAL ID: {digital.Id}");
+                    Console.WriteLine($"NOME: {digital.Nome.ToUpper()} -- PREÇO: R${digital.Preco.ToString("N2")} -- AUTOR: {digital.Autor.ToUpper()} -- FORMATO: {digital.Formato.ToUpper()} -- QUANTIDADE: {digital.Quantidade}x === PREÇO COM DESCONTO: {digital.CalcularTotal().ToString("N2")}");
+
+                }
             }
-            Console.WriteLine();
-            Console.WriteLine("\nLIVROS DIGITAIS:");
-            foreach (var livroDigital in listaLivrosDigitais)
-            {
-                Console.WriteLine($"ID: {livroDigital.Id},{livroDigital.Nome.ToUpper()}, R${livroDigital.Preco.ToString("N2")}, {livroDigital.Autor.ToUpper()}, {livroDigital.Formato.ToUpper()}, Valor com Desconto: R${livroDigital.CalcularTotal().ToString("N2")}");
-            }
+
+            
+            
         }
 
         public void RemoverLivros(int entrada)
         {
-
-            //Percorre a lista do último índice até o primeiro e valida se a entrada é igual ao índice i referente ao nome que está na lista
-            for (int i = livros.Count - 1; i >= 0; i--)
+            if (_livros.Remove(entrada))
             {
-                if (entrada == livros[i].Id)
-                {
-                    livros.RemoveAt(i);
-                }
+                Console.WriteLine($"LIVRO: {entrada} REMOVIDO COM SUCESSO!!!");
             }
+            else
+            {
+                throw new ArgumentException("ERRO: LIVRO NÃO LOCALIZADO, NÃO FOI POSSÍVEL REMOVER!!");
+            }
+            
+            
         }
 
-        public void MostrarLista()
+        public void ConsultarLivro(int entrada)
         {
-            foreach (var listaCompleta in livros)
+            if (_livros.TryGetValue(entrada, out var livro))
             {
-                Console.WriteLine($"ID: {listaCompleta.Id}, {listaCompleta.Nome.ToUpper()}, R${listaCompleta.Preco.ToString("N2")}, {listaCompleta.Autor.ToUpper()}");
+                Console.WriteLine("LIVRO ENCONTRADO!!");
+
+                if (livro is LivroFisico f)
+                {
+                    Console.WriteLine($"NOME: {f.Nome.ToUpper()} -- TIPO: Físico -- CAPA: {f.TipoCapa.ToUpper()} === PREÇO COM FRETE = R${f.CalcularTotal().ToString("N2")}");
+                
+                }
+                else if(livro is LivroDigital d){
+                    Console.WriteLine($"NOME: {d.Nome.ToUpper()} -- TIPO: Digital -- FORMATO: {d.Formato.ToUpper()} === PREÇO COM DESCONTO = R${d.CalcularTotal().ToString("N2")}");
+                }
+                else
+                {
+                    throw new ArgumentException("ERRO: ID NÃO ENCONTRADO");
+                }
             }
+            
         }
 
         public double CalcularTotal()
         {
-            double valorFinal = 0;
-            double totalFisico = 0;
-            double totalDigital = 0;
-
-            var listaLivrosFisicos = livros.OfType<LivroFisico>().ToList();
-            var listaLivrosDigitais = livros.OfType<LivroDigital>().ToList();
-
-            foreach (var livroFisico in listaLivrosFisicos)
+        
+            double totalDigital = 0, totalFisico = 0;
+     
+            foreach (var item in _livros.Values)
             {
-                totalFisico += livroFisico.CalcularTotal();
-
+                if (item is LivroDigital digital)
+                {
+                    totalDigital += (digital.CalcularTotal());
+                }else if (item is LivroFisico fisico)
+                {
+                    totalFisico += (fisico.CalcularTotal());
+                }
             }
 
-            foreach (var livroDigital in listaLivrosDigitais)
-            {
-                totalDigital += livroDigital.CalcularTotal();
-                
-            }
-
-            valorFinal = totalFisico + totalDigital;
-
-            return valorFinal;
+            return totalDigital + totalFisico;
 
 
 
-        }
+
+         }
     }
 }

@@ -2,9 +2,28 @@ using System;
 namespace SistemaLivraria{
 
 public abstract class Produto{
-    public string Nome{get; set;}
 
-    protected double preco;
+    protected string nome = string.Empty;
+    public string Nome{
+        get { return nome; }
+
+        set
+        {
+
+           if (!string.IsNullOrWhiteSpace(value))
+           {
+              nome = value;
+           }
+           else
+           {
+               throw new ArgumentException("ERRO: Autor não pode ser vazio!!");
+           }
+        }
+
+
+        }
+
+        protected double preco;
     public double Preco{
         get { return preco;}
     
@@ -17,9 +36,24 @@ public abstract class Produto{
         
         }
 
-    public Produto(string nome, double preco){
+    protected int quantidade;
+
+    public int Quantidade {
+            get { return quantidade;}
+
+             set{
+                   if(value< 0){
+                        throw new ArgumentException("ERRO: Preco nao pode ser negativo");
+                    }
+                    quantidade = value; 
+             }
+        
+     }
+        
+    public Produto(string nome, double preco, int quantidade){
         Nome = nome;
         Preco = preco;
+        Quantidade = quantidade;
     }
 
     
