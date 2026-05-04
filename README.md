@@ -42,4 +42,16 @@ O projeto utiliza a estrutura ideal para cada necessidade de negócio, otimizand
 
 ## 💻 Destaque de Código
 
-Exemplo de conversão do
+Exemplo de conversão do carrinho temporário em um pedido firme e entrada na fila:
+
+```csharp
+// Snapshot do carrinho e criação do pedido
+Pedido p = new Pedido {
+    IdPedido = id,
+    dataPedido = DateTime.Now,
+    NomeCliente = nome,
+    NovoPedidoLivro = new HashSet<Livro>(gl.PedidoLivro) // Clonagem dos dados
+};
+
+gl.PedidoLivro.Clear(); // Limpa carrinho global
+filaPedidos.Enqueue(p); // Direto para a logística (FIFO)
