@@ -10,11 +10,11 @@ public class LivroDigital : Livro{
           Formato = formato;
     }
 
-    public override double CalcularTotal()
+    public override double CalculoPrecoUnitario()
     {
         
-        double desconto = (Preco * Quantidade) * 0.15;
-        return (Preco * Quantidade)- desconto;
+        double desconto = Preco * 0.15;
+        return Preco - desconto;
     }
 
     }

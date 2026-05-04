@@ -44,7 +44,7 @@ public abstract class Livro : Produto{
     }
 
 
-    public abstract double CalcularTotal();
+    public abstract double CalculoPrecoUnitario();
 
         public override bool Equals(object? obj)
         {

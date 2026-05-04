@@ -10,9 +10,9 @@ public class LivroFisico : Livro{
             TipoCapa = tipoCapa;
     }
 
-    public override double CalcularTotal()
-    {
-        double valorFrete = (Preco * Quantidade) + 15.00; // Valor fixo para o frete
+    public override double CalculoPrecoUnitario()
+        {
+        double valorFrete = Preco + 15.00; // Valor fixo para o frete
         return valorFrete;
     }
 
